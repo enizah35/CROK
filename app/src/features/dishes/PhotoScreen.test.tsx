@@ -91,6 +91,11 @@ const mockRpc = jest.fn<Promise<Result<unknown>>, [string, unknown?]>();
 const mockUpdate = jest.fn();
 const mockUpdateEq = jest.fn<Promise<{ error: unknown }>, unknown[]>();
 const mockRecipe = jest.fn<Promise<Result<{ active_min: number }>>, []>();
+const mockClearLocalCookState = jest.fn((_keep: string | null) => Promise.resolve());
+jest.mock('@/features/cook/cleanup', () => ({
+  clearLocalCookState: (keep: string | null) => mockClearLocalCookState(keep),
+}));
+
 jest.mock('@/lib/supabase', () => ({
   supabase: {
     storage: { from: () => ({ upload: (...args: unknown[]) => mockUpload(...args) }) },
@@ -136,6 +141,7 @@ let activeSession: Result<unknown>;
 let queryClient: QueryClient;
 
 beforeEach(() => {
+  mockClearLocalCookState.mockClear();
   mockReplace.mockReset();
   mockUserId = UID;
   mockPermission = { granted: true, canAskAgain: true };
@@ -230,6 +236,8 @@ describe('PhotoScreen : « Passer » (R-07)', () => {
     expect(mockRpc).not.toHaveBeenCalled();
     expect(mockUpload).not.toHaveBeenCalled();
     expect(screen.getByTestId('skipped-screen')).toBeOnTheScreen();
+    // Minuteurs et état local du mode cuisine oubliés.
+    expect(mockClearLocalCookState).toHaveBeenCalledWith(null);
     expect(screen.getByText(/ne compte pas pour ta série/)).toBeOnTheScreen();
     expect(screen.queryByText(/\+\d+ XP/)).toBeNull();
     await fireEvent.press(button('Voir les recettes'));
@@ -271,6 +279,8 @@ describe('PhotoScreen : validation et récompense (R-08 à R-17)', () => {
     expect(screen.getByTestId('reward-total')).toHaveTextContent('Total : 700 XP');
     expect(screen.getByTestId('pepin-fier')).toBeOnTheScreen();
     expect(invalidate).toHaveBeenCalledWith({ queryKey: ['progress'] });
+    expect(invalidate).toHaveBeenCalledWith({ queryKey: ['cook', 'active'] });
+    expect(mockClearLocalCookState).toHaveBeenCalledWith(null);
 
     await fireEvent.press(button('Voir mon profil'));
     expect(mockReplace).toHaveBeenLastCalledWith('/profil');

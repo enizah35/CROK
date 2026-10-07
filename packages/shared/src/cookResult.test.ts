@@ -2,10 +2,10 @@ import { describe, expect, it } from 'vitest';
 
 import {
   COOK_ERROR_CODES,
+  activeCookSessionSchema,
   cookErrorCode,
   cookErrorView,
   cookResultSchema,
-  cookSessionTimingSchema,
   dishPhotoPath,
   formatWait,
   secondsUntilValidation,
@@ -39,9 +39,9 @@ describe('cookResultSchema', () => {
   });
 });
 
-describe('cookSessionTimingSchema', () => {
-  it('accepte null (pas de session en cours) et la forme de get_active_cook_session', () => {
-    expect(cookSessionTimingSchema.parse(null)).toBeNull();
+describe('activeCookSessionSchema', () => {
+  it('accepte la forme de get_active_cook_session (null admis via nullable)', () => {
+    expect(activeCookSessionSchema.nullable().parse(null)).toBeNull();
     const session = {
       id: '0b8a6f4e-1c2d-4e3f-8a9b-0c1d2e3f4a5b',
       recipe_id: '1c9b7a5f-2d3e-4f40-9b0c-1d2e3f4a5b6c',
@@ -50,7 +50,8 @@ describe('cookSessionTimingSchema', () => {
       started_at: '2026-10-07T10:00:00+00:00',
       server_now: '2026-10-07T10:42:00.35298+00:00',
     };
-    expect(cookSessionTimingSchema.parse(session)).toMatchObject({ id: session.id });
+    expect(activeCookSessionSchema.parse(session)).toEqual(session);
+    expect(() => activeCookSessionSchema.parse({ ...session, servings: 7 })).toThrow();
   });
 });
 

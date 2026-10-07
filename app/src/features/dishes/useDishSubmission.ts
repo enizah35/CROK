@@ -2,6 +2,8 @@ import { cookErrorView, dishPhotoPath, type CookErrorView, type CookResult } fro
 import { useQueryClient } from '@tanstack/react-query';
 import { useCallback, useRef, useState } from 'react';
 
+import { cookKeys } from '@/features/cook/api';
+import { clearLocalCookState } from '@/features/cook/cleanup';
 import { progressKeys } from '@/features/progress/api';
 
 import {
@@ -47,6 +49,17 @@ export function useDishSubmission(sessionId: string, userId: string) {
   const prepared = useRef<Prepared | null>(null);
   const uploadedPath = useRef<string | null>(null);
 
+  /**
+   * La session n'est plus en cours (validée ou passée) : on efface l'état local du mode cuisine
+   * (étape, minuteurs et leurs alertes programmées) et on relit la session active, pour que
+   * la reprise (R-06) ne la propose plus. Sans effet bloquant : un échec ici ne change rien
+   * au plat validé.
+   */
+  const forgetCookSession = useCallback(() => {
+    clearLocalCookState(null).catch(() => undefined);
+    void queryClient.invalidateQueries({ queryKey: cookKeys.active });
+  }, [queryClient]);
+
   const submit = useCallback(
     async (photo: CapturedPhoto) => {
       if (busy.current) return;
@@ -75,6 +88,7 @@ export function useDishSubmission(sessionId: string, userId: string) {
           sha256: current.sha256,
         });
         void queryClient.invalidateQueries({ queryKey: progressKeys.all });
+        forgetCookSession();
         setState({ phase: 'done', result });
       } catch (error) {
         if (error instanceof PhotoPreparationError) {
@@ -91,7 +105,7 @@ export function useDishSubmission(sessionId: string, userId: string) {
         busy.current = false;
       }
     },
-    [queryClient, sessionId, userId],
+    [queryClient, sessionId, userId, forgetCookSession],
   );
 
   const skip = useCallback(async () => {
@@ -100,13 +114,14 @@ export function useDishSubmission(sessionId: string, userId: string) {
     setState({ phase: 'skipping' });
     try {
       await skipCookSession(sessionId);
+      forgetCookSession();
       setState({ phase: 'skipped' });
     } catch {
       setState({ phase: 'skip_error' });
     } finally {
       busy.current = false;
     }
-  }, [sessionId]);
+  }, [sessionId, forgetCookSession]);
 
   /** Après « Reprendre » : on efface l'erreur affichée (la photo envoyée reste en cache). */
   const clearError = useCallback(() => {

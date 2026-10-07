@@ -1,7 +1,7 @@
 import {
+  activeCookSessionSchema,
   cookErrorCode,
   cookResultSchema,
-  cookSessionTimingSchema,
   secondsUntilValidation,
   type CookErrorCode,
   type CookResult,
@@ -82,7 +82,7 @@ export async function fetchValidationWait(sessionId: string): Promise<number | n
   try {
     const { data, error } = await supabase.rpc('get_active_cook_session');
     if (error) return null;
-    const session = cookSessionTimingSchema.safeParse(data);
+    const session = activeCookSessionSchema.nullable().safeParse(data);
     if (!session.success || session.data?.id !== sessionId) return null;
     const { data: recipe, error: recipeError } = await supabase
       .from('recipes')

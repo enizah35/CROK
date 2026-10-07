@@ -24,18 +24,19 @@ export const cookResultSchema = z.object({
 export type CookResult = z.infer<typeof cookResultSchema>;
 
 /**
- * Sous-ensemble de `get_active_cook_session` utile à l'app pour estimer l'attente après
- * `too_early` (la fonction renvoie `null` sans session en cours).
+ * Réponse non nulle de `get_active_cook_session()` (R-06) : la session `en_cours` de moins de
+ * 6 h. Schéma unique, utilisé par le mode cuisine (reprise) et par l'écran photo (attente après
+ * `too_early`). La fonction renvoie `null` quand il n'y a pas de session en cours.
  */
-export const cookSessionTimingSchema = z
-  .object({
-    id: z.uuid(),
-    recipe_id: z.uuid(),
-    started_at: z.iso.datetime({ offset: true }),
-    server_now: z.iso.datetime({ offset: true }),
-  })
-  .nullable();
-export type CookSessionTiming = z.infer<typeof cookSessionTimingSchema>;
+export const activeCookSessionSchema = z.object({
+  id: z.string().min(1),
+  recipe_id: z.string().min(1),
+  recipe_version: z.number().int(),
+  servings: z.number().int().min(1).max(6),
+  started_at: z.iso.datetime({ offset: true }),
+  server_now: z.iso.datetime({ offset: true }),
+});
+export type ActiveCookSession = z.infer<typeof activeCookSessionSchema>;
 
 /** Messages d'exception de `complete_cook_session` (le `message` est le code). */
 export const COOK_ERROR_CODES = [

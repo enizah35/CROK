@@ -24,6 +24,7 @@
     "scheme": "crok",
     "plugins": [
       "expo-router",
+      "expo-notifications",
       [
         "expo-camera",
         {

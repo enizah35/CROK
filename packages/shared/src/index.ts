@@ -98,20 +98,20 @@ export {
 export type { MyProgress, PepinEtat } from './progress';
 export {
   COOK_ERROR_CODES,
+  activeCookSessionSchema,
   NOT_COUNTED_MESSAGE,
   SKIPPED_MESSAGE,
   cookErrorCode,
   cookErrorView,
   cookResultSchema,
-  cookSessionTimingSchema,
   dishPhotoPath,
   formatWait,
   secondsUntilValidation,
 } from './cookResult';
 export type {
+  ActiveCookSession,
   CookErrorAction,
   CookErrorCode,
   CookErrorView,
   CookResult,
-  CookSessionTiming,
 } from './cookResult';
