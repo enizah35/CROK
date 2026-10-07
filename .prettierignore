@@ -1,0 +1,11 @@
+node_modules
+pnpm-lock.yaml
+dist
+web-build
+.expo
+app/ios
+app/android
+app/expo-env.d.ts
+
+# Documents rédigés à la main (plan, vision) : pas de reformatage automatique.
+*.md

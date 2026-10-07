@@ -1,0 +1,42 @@
+# Dépendances
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+app/ios/
+app/android/
+.metro-health-check*
+.kotlin/
+*.orig.*
+
+# Signatures et secrets natifs
+*.jks
+*.p8
+*.p12
+*.key
+*.pem
+*.mobileprovision
+
+# Variables d'environnement : seul .env.example est versionné
+.env
+.env.*
+!.env.example
+
+# Supabase local
+supabase/.branches/
+supabase/.temp/
+
+# Outils
+*.tsbuildinfo
+coverage/
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+pnpm-debug.log*
+
+# Systèmes
+.DS_Store
+Thumbs.db
