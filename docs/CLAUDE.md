@@ -48,6 +48,16 @@ Chaque nouvelle table : RLS activée, droits accordés explicitement à `authent
 par défaut), tests pgTAP « ami » et « inconnu », puis `pnpm db:types`. Fonction security definer :
 `revoke execute ... from public, anon` puis `grant execute ... to authenticated` si le client l'appelle.
 
+## API serveur de la phase 1
+
+Validation d'un plat, XP et série vivent dans Postgres (R-06, R-08 à R-18). L'app appelle trois
+fonctions RPC, réservées à `authenticated` : `get_active_cook_session()`,
+`complete_cook_session(p_session_id, p_photo_path, p_photo_sha256)` et `get_my_progress()`. Formes
+JSON, codes d'erreur (`session_not_found`, `session_not_running`, `session_expired`, `too_early`,
+`photo_missing`, `duplicate_photo`, `invalid_photo_path`) et idempotence :
+[api-serveur.md](api-serveur.md). Les variantes internes, paramétrées par l'instant, et
+`private.streak_for` sont dans le schéma `private`, jamais exposé au client.
+
 Ajouter une dépendance native à l'app : `cd app && npx expo install <paquet>` (versions
 compatibles avec le SDK). Si l'API Expo n'est pas joignable, prendre la version indiquée dans
 `node_modules/expo/bundledNativeModules.json`.
