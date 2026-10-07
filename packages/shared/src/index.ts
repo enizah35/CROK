@@ -10,3 +10,24 @@ export type {
   TablesUpdate,
 } from './database.types';
 export { Constants } from './database.types';
+export {
+  EQUIPMENT,
+  INGREDIENT_CATEGORIES,
+  UNITS,
+  challengeSchema,
+  contentJsonSchema,
+  ingredientSchema,
+  recipeSchema,
+  stepSchema,
+} from './content';
+export type {
+  Challenge,
+  ChallengeInput,
+  Equipment,
+  Ingredient,
+  IngredientCategory,
+  Recipe,
+  RecipeInput,
+  Step,
+  Unit,
+} from './content';

@@ -1,0 +1,66 @@
+# yaml-language-server: $schema=../recipe.schema.json
+slug: dahl-lentilles-corail
+title: Dahl de lentilles corail au lait de coco
+servings_base: 4
+total_min: 35
+active_min: 12
+cost_cents_per_serving: 110
+equipment: [plaques]
+tags: [vegetarien, vegan, batch-cooking]
+
+ingredients:
+  - name: lentilles corail
+    quantity: 250
+    unit: g
+    category: feculents
+  - name: riz basmati
+    quantity: 250
+    unit: g
+    category: feculents
+  - name: lait de coco
+    quantity: 400
+    unit: ml
+    category: conserves
+  - name: tomates concassées en conserve
+    quantity: 400
+    unit: g
+    category: conserves
+  - name: oignon
+    quantity: 1
+    unit: piece
+    category: fruits_legumes
+  - name: gousse d'ail
+    quantity: 2
+    unit: piece
+    category: fruits_legumes
+  - name: curry en poudre
+    quantity: 2
+    unit: cuillere_cafe
+    category: epices_condiments
+  - name: gingembre en poudre
+    quantity: 1
+    unit: cuillere_cafe
+    category: epices_condiments
+  - name: eau
+    quantity: 500
+    unit: ml
+  - name: huile
+    quantity: 1
+    unit: cuillere_soupe
+    category: epicerie
+  - name: sel
+    unit: au_gout
+
+steps:
+  - text: Émince l'oignon et l'ail. Rince les lentilles dans une passoire jusqu'à ce que l'eau soit claire.
+  - text: Dans une casserole, fais revenir l'oignon dans l'huile à feu moyen jusqu'à ce qu'il soit tendre.
+    timer_sec: 240
+  - text: Ajoute l'ail, le curry et le gingembre, puis remue une minute pour réveiller les épices.
+    timer_sec: 60
+  - text: Ajoute les lentilles, les tomates, le lait de coco et l'eau. Sale, porte à frémissement et laisse cuire à couvert en remuant de temps en temps.
+    timer_sec: 1200
+    tip: Le dahl épaissit en refroidissant ; ajoute un peu d'eau s'il est trop épais.
+  - text: Sur la deuxième plaque, fais cuire le riz dans une grande casserole d'eau bouillante salée.
+    timer_sec: 660
+  - text: Égoutte le riz et sers-le avec le dahl bien chaud.
+    tip: Se garde trois jours au frais et se congèle très bien.

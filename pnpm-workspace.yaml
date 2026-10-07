@@ -1,9 +1,12 @@
 packages:
   - app
   - packages/*
+  - scripts
 
-# unrs-resolver (via eslint-config-expo) fournit ses binaires précompilés : pas de script d'installation nécessaire.
+# unrs-resolver (via eslint-config-expo) et esbuild (via tsx) fournissent leurs binaires précompilés :
+# pas de script d'installation nécessaire.
 ignoredBuiltDependencies:
+  - esbuild
   - unrs-resolver
 
 # Le paquet supabase télécharge le binaire de la CLI à l'installation.
