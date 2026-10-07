@@ -2,14 +2,15 @@ import type { ReactNode } from 'react';
 import { View, type StyleProp, type ViewStyle } from 'react-native';
 import Svg, { Circle, Ellipse, G, Path, Rect } from 'react-native-svg';
 
+import { PEPIN_ETATS, type PepinEtat } from '@crok/shared';
+
 import { pepinColors as c } from './tokens';
 
 /**
- * États de Pépin (R-30). Le calcul de l'état (priorités fete > fier > en_feu > motive > affame
- * > neutre) relève de la tâche 3.1 ; ce composant ne fait que dessiner l'état reçu.
+ * États de Pépin (R-30) : la liste et le calcul (`pepinEtatFromProgress`) vivent dans
+ * `@crok/shared` ; ce composant ne fait que dessiner l'état reçu. Réexportés ici pour `@/ui`.
  */
-export const PEPIN_ETATS = ['neutre', 'motive', 'affame', 'en_feu', 'fier', 'fete'] as const;
-export type PepinEtat = (typeof PEPIN_ETATS)[number];
+export { PEPIN_ETATS, type PepinEtat };
 
 /** Libellés lus par les lecteurs d'écran. Ton bienveillant, jamais culpabilisant (R-31). */
 export const PEPIN_LABELS: Record<PepinEtat, string> = {
