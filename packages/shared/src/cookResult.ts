@@ -8,6 +8,13 @@ import { z } from 'zod';
 const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'date AAAA-MM-JJ attendue');
 const count = z.number().int().nonnegative();
 
+/**
+ * Raisons d'un plat non compté (R-11), renvoyées par le serveur dans `not_counted_reason` :
+ * 2 plats déjà comptés aujourd'hui (prioritaire), ou recette déjà comptée aujourd'hui.
+ */
+export const NOT_COUNTED_REASONS = ['daily_limit', 'recipe_already_counted_today'] as const;
+export type NotCountedReason = (typeof NOT_COUNTED_REASONS)[number];
+
 /** Réponse de `complete_cook_session` (R-08 à R-16). */
 export const cookResultSchema = z.object({
   dish_id: z.uuid(),
@@ -20,6 +27,8 @@ export const cookResultSchema = z.object({
   lifetime_xp: count,
   /** R-10 : rappel sur une session déjà validée (après un échec réseau) ; rien de plus créé. */
   already_completed: z.boolean(),
+  /** R-11 : pourquoi le plat ne rapporte pas d'XP ; `null` s'il est compté. */
+  not_counted_reason: z.enum(NOT_COUNTED_REASONS).nullable(),
 });
 export type CookResult = z.infer<typeof cookResultSchema>;
 
@@ -186,9 +195,20 @@ export function dishPhotoPath(userId: string, sessionId: string, sha256: string)
   return `${userId}/${sessionId}/${sha256}.jpg`;
 }
 
-/** Explication quand le plat est enregistré sans XP (R-11). */
-export const NOT_COUNTED_MESSAGE =
-  'Ton plat est bien enregistré, mais il ne rapporte pas d’XP aujourd’hui : on compte au plus 2 plats par jour, et chaque recette une seule fois par jour. Tu remets ça demain ?';
+/**
+ * Explication quand le plat est enregistré sans XP (R-11), selon la raison donnée par le
+ * serveur. `null` (réponse sans raison) : explication générique des deux limites.
+ */
+export function notCountedMessage(reason: NotCountedReason | null): string {
+  switch (reason) {
+    case 'daily_limit':
+      return 'Ton plat est bien enregistré, mais tu as déjà 2 plats comptés aujourd’hui : on en compte 2 par jour au maximum. Celui-ci ne rapporte pas d’XP, tu remets ça demain ?';
+    case 'recipe_already_counted_today':
+      return 'Ton plat est bien enregistré, mais cette recette a déjà été comptée aujourd’hui : chaque recette compte une fois par jour. Tente une autre recette, ou celle-ci demain !';
+    case null:
+      return 'Ton plat est bien enregistré, mais il ne rapporte pas d’XP aujourd’hui : on compte au plus 2 plats par jour, et chaque recette une seule fois par jour. Tu remets ça demain ?';
+  }
+}
 
 /** Écran neutre après « Passer » (R-07). */
 export const SKIPPED_MESSAGE =

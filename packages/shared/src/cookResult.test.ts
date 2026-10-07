@@ -2,12 +2,14 @@ import { describe, expect, it } from 'vitest';
 
 import {
   COOK_ERROR_CODES,
+  NOT_COUNTED_REASONS,
   activeCookSessionSchema,
   cookErrorCode,
   cookErrorView,
   cookResultSchema,
   dishPhotoPath,
   formatWait,
+  notCountedMessage,
   secondsUntilValidation,
 } from './cookResult';
 
@@ -21,6 +23,7 @@ const result = {
   streak: 1,
   lifetime_xp: 300,
   already_completed: false,
+  not_counted_reason: null,
 };
 
 describe('cookResultSchema', () => {
@@ -36,6 +39,34 @@ describe('cookResultSchema', () => {
       false,
     );
     expect(cookResultSchema.safeParse(null).success).toBe(false);
+    expect(cookResultSchema.safeParse({ ...result, not_counted_reason: 'autre' }).success).toBe(
+      false,
+    );
+    expect(cookResultSchema.safeParse({ ...result, not_counted_reason: undefined }).success).toBe(
+      false,
+    );
+  });
+
+  it('accepte chaque raison de plat non compté (R-11)', () => {
+    for (const reason of NOT_COUNTED_REASONS) {
+      const parsed = cookResultSchema.parse({
+        ...result,
+        counted: false,
+        xp_awarded: 0,
+        not_counted_reason: reason,
+      });
+      expect(parsed.not_counted_reason).toBe(reason);
+    }
+  });
+});
+
+describe('notCountedMessage (R-11)', () => {
+  it('explique précisément la raison donnée par le serveur', () => {
+    expect(notCountedMessage('daily_limit')).toMatch(/déjà 2 plats comptés aujourd’hui/);
+    expect(notCountedMessage('recipe_already_counted_today')).toMatch(
+      /cette recette a déjà été comptée aujourd’hui/,
+    );
+    expect(notCountedMessage(null)).toMatch(/au plus 2 plats par jour/);
   });
 });
 

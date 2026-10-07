@@ -130,6 +130,7 @@ function cookResult(overrides: Record<string, unknown> = {}) {
     streak: 1,
     lifetime_xp: 700,
     already_completed: false,
+    not_counted_reason: null,
     ...overrides,
   };
 }
@@ -299,14 +300,33 @@ describe('PhotoScreen : validation et récompense (R-08 à R-17)', () => {
     expect(screen.getByTestId('reward-streak')).toHaveTextContent('Série : 2 semaines');
   });
 
-  it('plat non compté (R-11) : pas d’XP, explication bienveillante', async () => {
-    completeResponses = [ok(cookResult({ counted: false, xp_awarded: 0 }))];
+  it('plat non compté, limite du jour (R-11) : pas d’XP, raison précise', async () => {
+    completeResponses = [
+      ok(cookResult({ counted: false, xp_awarded: 0, not_counted_reason: 'daily_limit' })),
+    ];
     await renderScreen();
     await takeAndValidate();
     expect(screen.getByText('Plat enregistré !')).toBeOnTheScreen();
     expect(screen.queryByTestId('reward-xp')).toBeNull();
     expect(screen.getByTestId('reward-not-counted')).toHaveTextContent(
-      /au plus 2 plats par jour, et chaque recette une seule fois par jour/,
+      /déjà 2 plats comptés aujourd’hui/,
+    );
+  });
+
+  it('plat non compté, recette déjà comptée aujourd’hui (R-11) : raison précise', async () => {
+    completeResponses = [
+      ok(
+        cookResult({
+          counted: false,
+          xp_awarded: 0,
+          not_counted_reason: 'recipe_already_counted_today',
+        }),
+      ),
+    ];
+    await renderScreen();
+    await takeAndValidate();
+    expect(screen.getByTestId('reward-not-counted')).toHaveTextContent(
+      /cette recette a déjà été comptée aujourd’hui/,
     );
   });
 

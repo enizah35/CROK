@@ -1,9 +1,4 @@
-import {
-  NOT_COUNTED_MESSAGE,
-  pepinEtatAfterDish,
-  streakLabel,
-  type CookResult,
-} from '@crok/shared';
+import { notCountedMessage, pepinEtatAfterDish, streakLabel, type CookResult } from '@crok/shared';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
@@ -61,7 +56,7 @@ export function RewardView({ result }: { result: CookResult }) {
         <XpBurst xp={result.xp_awarded} />
       ) : (
         <Text color="textMuted" align="center" testID="reward-not-counted">
-          {NOT_COUNTED_MESSAGE}
+          {notCountedMessage(result.not_counted_reason)}
         </Text>
       )}
 

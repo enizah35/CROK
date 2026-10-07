@@ -74,9 +74,22 @@ Résultat :
   "goal_reached": true,
   "streak": 1,
   "lifetime_xp": 300,
-  "already_completed": false
+  "already_completed": false,
+  "not_counted_reason": null
 }
 ```
+
+`not_counted_reason` (migration `20261010000000_cook_not_counted_reason.sql`) dit pourquoi un plat
+ne rapporte pas d'XP (R-11) :
+
+| Valeur                         | Cas                                                                          |
+| ------------------------------ | ---------------------------------------------------------------------------- |
+| `null`                         | plat compté                                                                  |
+| `daily_limit`                  | 2 plats déjà comptés ce jour-là (Paris) ; l'emporte si les deux cas tiennent |
+| `recipe_already_counted_today` | la même recette a déjà été comptée ce jour-là                                |
+
+Elle est déduite des plats comptés du même jour créés avant celui-ci : le rappel idempotent renvoie
+la même valeur.
 
 **Idempotence (R-10)** : rappelée sur une session déjà validée par le même utilisateur (par exemple
 après un échec réseau), la fonction renvoie le même résultat avec `already_completed = true`, sans
