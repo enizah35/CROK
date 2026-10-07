@@ -49,3 +49,32 @@ export {
   validatePseudo,
 } from './account';
 export type { PseudoError, PseudoValidation } from './account';
+export {
+  MAX_SERVINGS,
+  MIN_SERVINGS,
+  TO_TASTE_LABEL,
+  clampServings,
+  formatNumber,
+  formatQuantity,
+  roundQuantity,
+  scaleIngredient,
+  scaleIngredients,
+  scaleQuantity,
+} from './portions';
+export {
+  BUDGET_OPTIONS,
+  EMPTY_FILTERS,
+  EQUIPMENT_LABELS,
+  TIME_OPTIONS,
+  availableTags,
+  countActiveFilters,
+  filterRecipes,
+  formatDuration,
+  formatEuros,
+  isEquipment,
+  matchesFilters,
+  tagLabel,
+  toggleThreshold,
+  toggleValue,
+} from './recipeFilters';
+export type { FilterableRecipe, RecipeFilters } from './recipeFilters';

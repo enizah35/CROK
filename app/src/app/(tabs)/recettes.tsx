@@ -1,5 +1,5 @@
-import { ScreenPlaceholder } from '@/components/ScreenPlaceholder';
+import { RecipeCatalog } from '@/features/recipes/RecipeCatalog';
 
 export default function RecettesScreen() {
-  return <ScreenPlaceholder title="Recettes" task="1.1" />;
+  return <RecipeCatalog />;
 }
