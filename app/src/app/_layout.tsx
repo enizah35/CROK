@@ -41,7 +41,7 @@ function RootNavigator() {
         <Stack.Screen name="recette/[id]" />
         <Stack.Screen name="cook/lancer" />
         <Stack.Screen name="cook/[session]" />
-        <Stack.Screen name="cook/photo" />
+        <Stack.Screen name="cook/photo" options={{ gestureEnabled: false }} />
       </Stack.Protected>
     </Stack>
   );

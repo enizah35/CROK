@@ -1,7 +1,12 @@
-import type { Ingredient } from '@crok/shared';
+import {
+  MAX_SERVINGS,
+  MIN_SERVINGS,
+  formatQuantity,
+  scaleIngredients,
+  type Ingredient,
+} from '@crok/shared';
 import { StyleSheet, View } from 'react-native';
 
-import { MAX_SERVINGS, MIN_SERVINGS, formatQuantity, scaleIngredients } from './scale';
 import { Button, Card, Text, useTheme } from '@/ui';
 
 type Props = {
@@ -47,8 +52,9 @@ export function IngredientsPanel({
       </View>
       <View style={{ gap: spacing.xs }}>
         {scaled.map((ingredient, index) => {
-          const quantity = formatQuantity(ingredient.scaledQuantity, ingredient.unit);
-          const suffix = ingredient.unit === 'au_gout' ? ' (au goût)' : '';
+          const toTaste = ingredient.unit === 'au_gout' || ingredient.quantity === undefined;
+          const quantity = toTaste ? '' : formatQuantity(ingredient.quantity, ingredient.unit);
+          const suffix = toTaste ? ' (au goût)' : '';
           return (
             <Text key={`${ingredient.name}-${index}`} testID={`ingredient-${index}`}>
               {quantity ? <Text variant="bodyStrong">{quantity} </Text> : null}

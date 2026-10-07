@@ -20,16 +20,9 @@ export const cookKeys = {
   recipe: (recipeId: string) => ['cook', 'recipe', recipeId] as const,
 };
 
-// TODO(1.3) : get_active_cook_session n'est pas encore dans database.types.ts (régénéré par
-// l'agent 1.3). Appel non typé en attendant ; la réponse est de toute façon validée par Zod.
-type UntypedRpc = (
-  fn: string,
-  args?: Record<string, unknown>,
-) => PromiseLike<{ data: unknown; error: unknown }>;
-
 export async function fetchActiveSession(): Promise<ActiveSession | null> {
-  const rpc = supabase.rpc as unknown as UntypedRpc;
-  const { data, error } = await rpc.call(supabase, 'get_active_cook_session');
+  // Renvoie `Json` dans les types générés : la forme est validée par Zod (schéma partagé).
+  const { data, error } = await supabase.rpc('get_active_cook_session');
   if (error) throw error;
   return parseActiveSession(data);
 }

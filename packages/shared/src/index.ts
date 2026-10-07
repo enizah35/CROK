@@ -90,8 +90,30 @@ export {
   parisWeekday,
   parseMyProgress,
   parseServerInstant,
+  pepinEtatAfterDish,
   pepinEtatFromProgress,
   streakLabel,
   todayDishesLabel,
 } from './progress';
 export type { MyProgress, PepinEtat } from './progress';
+export {
+  COOK_ERROR_CODES,
+  activeCookSessionSchema,
+  NOT_COUNTED_REASONS,
+  SKIPPED_MESSAGE,
+  cookErrorCode,
+  cookErrorView,
+  cookResultSchema,
+  dishPhotoPath,
+  formatWait,
+  notCountedMessage,
+  secondsUntilValidation,
+} from './cookResult';
+export type {
+  ActiveCookSession,
+  CookErrorAction,
+  CookErrorCode,
+  CookErrorView,
+  CookResult,
+  NotCountedReason,
+} from './cookResult';

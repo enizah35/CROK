@@ -22,6 +22,17 @@
       "favicon": "./assets/favicon.png"
     },
     "scheme": "crok",
-    "plugins": ["expo-router", "expo-notifications"]
+    "plugins": [
+      "expo-router",
+      "expo-notifications",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "CROK utilise l’appareil photo pour prendre la photo de ton plat et le valider.",
+          "recordAudioAndroid": false,
+          "barcodeScannerEnabled": false
+        }
+      ]
+    ]
   }
 }

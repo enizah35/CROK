@@ -1,27 +1,24 @@
 /**
  * Session de cuisson active (R-03, R-06), telle que renvoyée par le serveur.
  */
-import { ingredientSchema, stepSchema } from '@crok/shared';
+import {
+  activeCookSessionSchema,
+  ingredientSchema,
+  stepSchema,
+  type ActiveCookSession,
+} from '@crok/shared';
 import { z } from 'zod';
 
 /** R-06 : une session se reprend pendant 6 h. */
 export const RESUME_WINDOW_MS = 6 * 3600 * 1000;
 
-/** Forme de `get_active_cook_session()` (contrat serveur de la phase 1). */
-export const activeSessionSchema = z.object({
-  id: z.string().min(1),
-  recipe_id: z.string().min(1),
-  recipe_version: z.number().int(),
-  servings: z.number().int().min(1).max(6),
-  started_at: z.string().min(1),
-  server_now: z.string().min(1),
-});
-export type ActiveSession = z.infer<typeof activeSessionSchema>;
+/** Forme de `get_active_cook_session()` : schéma partagé de @crok/shared (cookResult.ts). */
+export type ActiveSession = ActiveCookSession;
 
 /** `null` (aucune session en cours) ou une session valide ; toute autre forme est une erreur. */
 export function parseActiveSession(data: unknown): ActiveSession | null {
   if (data === null || data === undefined) return null;
-  return activeSessionSchema.parse(data);
+  return activeCookSessionSchema.parse(data);
 }
 
 /**

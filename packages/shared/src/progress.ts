@@ -116,11 +116,42 @@ const AFFAME_FROM_WEEKDAY = 4;
  * `affame` 0 plat compté à partir du jeudi 00:00 (heure de Paris, d'après `server_now`).
  */
 export function pepinEtatFromProgress(progress: MyProgress): PepinEtat {
-  if (progress.today_dishes_count > 0) return 'fier';
-  if (progress.goal_reached) return 'en_feu';
-  if (progress.week_dishes_count > 0) return 'motive';
-  const weekday = parisWeekday(parseServerInstant(progress.server_now));
-  if (weekday >= AFFAME_FROM_WEEKDAY) return 'affame';
+  return pepinEtat({
+    todayDishesCount: progress.today_dishes_count,
+    goalReached: progress.goal_reached,
+    weekDishesCount: progress.week_dishes_count,
+    weekday: () => parisWeekday(parseServerInstant(progress.server_now)),
+  });
+}
+
+/**
+ * État de Pépin sur l'écran de récompense, juste après la validation d'un plat : même règle
+ * que `pepinEtatFromProgress` (R-30) avec au moins un plat validé aujourd'hui, donc `fier`,
+ * prioritaire sur `en_feu` même quand le plat fait atteindre 3/3.
+ */
+export function pepinEtatAfterDish(result: {
+  goal_reached: boolean;
+  week_dishes_count: number;
+}): PepinEtat {
+  return pepinEtat({
+    todayDishesCount: 1,
+    goalReached: result.goal_reached,
+    weekDishesCount: result.week_dishes_count,
+    weekday: () => 1,
+  });
+}
+
+/** Règle unique de R-30 (hors défi) ; `weekday` n'est évalué que si aucun plat n'est compté. */
+function pepinEtat(input: {
+  todayDishesCount: number;
+  goalReached: boolean;
+  weekDishesCount: number;
+  weekday: () => number;
+}): PepinEtat {
+  if (input.todayDishesCount > 0) return 'fier';
+  if (input.goalReached) return 'en_feu';
+  if (input.weekDishesCount > 0) return 'motive';
+  if (input.weekday() >= AFFAME_FROM_WEEKDAY) return 'affame';
   return 'neutre';
 }
 

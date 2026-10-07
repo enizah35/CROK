@@ -347,13 +347,14 @@ select pg_temp.done('c1', '00000000-0000-4000-8000-0000000000c1', '10000000-0000
   '2026-10-14 12:00 Europe/Paris', 101);
 select is(
   (select array_agg(k order by k) from jsonb_object_keys(pg_temp.j('c1')) as k),
-  array['already_completed', 'counted', 'dish_id', 'goal_reached', 'lifetime_xp', 'streak',
-        'week_dishes_count', 'week_start', 'xp_awarded'],
+  array['already_completed', 'counted', 'dish_id', 'goal_reached', 'lifetime_xp',
+        'not_counted_reason', 'streak', 'week_dishes_count', 'week_start', 'xp_awarded'],
   'forme du résultat de complete_cook_session'
 );
 select is(pg_temp.j('c1') - 'dish_id',
   '{"counted": true, "xp_awarded": 100, "week_start": "2026-10-12", "week_dishes_count": 1,
-    "goal_reached": false, "streak": 0, "lifetime_xp": 100, "already_completed": false}'::jsonb,
+    "goal_reached": false, "streak": 0, "lifetime_xp": 100, "already_completed": false,
+    "not_counted_reason": null}'::jsonb,
   'R-13 : premier plat compté, 100 XP');
 select is((select status::text from public.cook_sessions where id = pg_temp.sid('c1')), 'terminee',
   'R-08 : session passée en terminee');
@@ -393,8 +394,9 @@ select pg_temp.done('c2', '00000000-0000-4000-8000-0000000000c1', '10000000-0000
   '2026-10-14 13:00 Europe/Paris', 102);
 select is(pg_temp.j('c2') - 'dish_id',
   '{"counted": false, "xp_awarded": 0, "week_start": "2026-10-12", "week_dishes_count": 1,
-    "goal_reached": false, "streak": 0, "lifetime_xp": 100, "already_completed": false}'::jsonb,
-  'R-11 : même recette deux fois le même jour → plat publié, 0 XP');
+    "goal_reached": false, "streak": 0, "lifetime_xp": 100, "already_completed": false,
+    "not_counted_reason": "recipe_already_counted_today"}'::jsonb,
+  'R-11 : même recette deux fois le même jour → plat publié, 0 XP (recipe_already_counted_today)');
 select is((select count(*)::integer from public.xp_ledger where dish_id = (pg_temp.j('c2') ->> 'dish_id')::uuid), 0,
   'R-11 : aucune ligne d''XP pour un plat non compté');
 select is(
@@ -409,7 +411,8 @@ select pg_temp.done('c3', '00000000-0000-4000-8000-0000000000c1', '10000000-0000
   '2026-10-14 14:00 Europe/Paris', 103);
 select is(pg_temp.j('c3') - 'dish_id',
   '{"counted": true, "xp_awarded": 100, "week_start": "2026-10-12", "week_dishes_count": 2,
-    "goal_reached": false, "streak": 0, "lifetime_xp": 200, "already_completed": false}'::jsonb,
+    "goal_reached": false, "streak": 0, "lifetime_xp": 200, "already_completed": false,
+    "not_counted_reason": null}'::jsonb,
   'R-11 : deuxième recette du jour comptée');
 
 -- 5. 23:59:59, r4 : troisième plat du jour → non compté.
@@ -417,8 +420,9 @@ select pg_temp.done('c4', '00000000-0000-4000-8000-0000000000c1', '10000000-0000
   '2026-10-14 23:59:59 Europe/Paris', 104);
 select is(pg_temp.j('c4') - 'dish_id',
   '{"counted": false, "xp_awarded": 0, "week_start": "2026-10-12", "week_dishes_count": 2,
-    "goal_reached": false, "streak": 0, "lifetime_xp": 200, "already_completed": false}'::jsonb,
-  'R-11 : au-delà de 2 plats comptés par jour (23:59:59) → 0 XP');
+    "goal_reached": false, "streak": 0, "lifetime_xp": 200, "already_completed": false,
+    "not_counted_reason": "daily_limit"}'::jsonb,
+  'R-11 : au-delà de 2 plats comptés par jour (23:59:59) → 0 XP (daily_limit)');
 select is(
   (select day_paris from public.dishes where id = (pg_temp.j('c4') ->> 'dish_id')::uuid),
   date '2026-10-14', 'R-01 : 23:59:59 (21:59:59 UTC) appartient au mercredi');
@@ -428,7 +432,8 @@ select pg_temp.done('c5', '00000000-0000-4000-8000-0000000000c1', '10000000-0000
   '2026-10-15 00:00 Europe/Paris', 105);
 select is(pg_temp.j('c5') - 'dish_id',
   '{"counted": true, "xp_awarded": 100, "week_start": "2026-10-12", "week_dishes_count": 3,
-    "goal_reached": true, "streak": 1, "lifetime_xp": 300, "already_completed": false}'::jsonb,
+    "goal_reached": true, "streak": 1, "lifetime_xp": 300, "already_completed": false,
+    "not_counted_reason": null}'::jsonb,
   'R-11, R-16, R-17 : minuit remet la limite du jour ; 3e plat → objectif atteint, série +1');
 select is(
   (select goal_reached_at from public.user_weeks
@@ -454,7 +459,8 @@ select pg_temp.done('c8', '00000000-0000-4000-8000-0000000000c1', '10000000-0000
   '2026-10-19 00:00 Europe/Paris', 108);
 select is(pg_temp.j('c8') - 'dish_id',
   '{"counted": true, "xp_awarded": 100, "week_start": "2026-10-19", "week_dishes_count": 1,
-    "goal_reached": false, "streak": 1, "lifetime_xp": 600, "already_completed": false}'::jsonb,
+    "goal_reached": false, "streak": 1, "lifetime_xp": 600, "already_completed": false,
+    "not_counted_reason": null}'::jsonb,
   'R-18 : lundi 00:00 → nouvelle semaine, compteur à 1 ; R-17 : série 1 conservée');
 
 -- Totaux (R-15) : 8 plats dont 6 comptés.
@@ -542,7 +548,8 @@ select is(
   row(date '2026-10-26', date '2026-10-26')::text, 'R-01 : lundi 00:10 CET (dimanche 23:10 UTC) → lundi, nouvelle semaine');
 select is(pg_temp.j('d3') - 'dish_id',
   '{"counted": true, "xp_awarded": 100, "week_start": "2026-10-26", "week_dishes_count": 1,
-    "goal_reached": false, "streak": 0, "lifetime_xp": 300, "already_completed": false}'::jsonb,
+    "goal_reached": false, "streak": 0, "lifetime_xp": 300, "already_completed": false,
+    "not_counted_reason": null}'::jsonb,
   'R-11, R-18 : après le changement d''heure, nouveau jour et nouvelle semaine');
 
 -- Dimanche 28 mars 2027 : 02:00 CET → 03:00 CEST. Session lancée à 00:30 (23:30 UTC la
@@ -661,7 +668,8 @@ select is(
     '00000000-0000-4000-8000-0000000000f1/' || current_setting('test.w1') || '/photo.jpg', repeat('f', 64))
     - 'dish_id' - 'week_start',
   '{"counted": true, "xp_awarded": 100, "week_dishes_count": 1, "goal_reached": false, "streak": 0,
-    "lifetime_xp": 100, "already_completed": false}'::jsonb,
+    "lifetime_xp": 100, "already_completed": false,
+    "not_counted_reason": null}'::jsonb,
   'complete_cook_session : plat compté pour W');
 select is(
   (public.complete_cook_session(current_setting('test.w1')::uuid,

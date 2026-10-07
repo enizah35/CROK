@@ -1,13 +1,13 @@
 /**
  * Lancement d'une cuisson (R-03) : crée la session puis remplace cet écran par le mode cuisine.
  */
+import { MAX_SERVINGS, MIN_SERVINGS } from '@crok/shared';
 import { router } from 'expo-router';
 import { useCallback, useEffect, useRef } from 'react';
 import { ActivityIndicator, StyleSheet } from 'react-native';
 
 import { useStartCookSession } from './api';
 import { cookErrorMessage } from './errors';
-import { MAX_SERVINGS, MIN_SERVINGS } from './scale';
 import { Button, ErrorState, Screen, Text, useTheme } from '@/ui';
 
 /** Paramètre de route → portions valides (R-04), sinon null. */

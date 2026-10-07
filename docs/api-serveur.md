@@ -74,9 +74,22 @@ Résultat :
   "goal_reached": true,
   "streak": 1,
   "lifetime_xp": 300,
-  "already_completed": false
+  "already_completed": false,
+  "not_counted_reason": null
 }
 ```
+
+`not_counted_reason` (migration `20261010000000_cook_not_counted_reason.sql`) dit pourquoi un plat
+ne rapporte pas d'XP (R-11) :
+
+| Valeur                         | Cas                                                                          |
+| ------------------------------ | ---------------------------------------------------------------------------- |
+| `null`                         | plat compté                                                                  |
+| `daily_limit`                  | 2 plats déjà comptés ce jour-là (Paris) ; l'emporte si les deux cas tiennent |
+| `recipe_already_counted_today` | la même recette a déjà été comptée ce jour-là                                |
+
+Elle est déduite des plats comptés du même jour créés avant celui-ci : le rappel idempotent renvoie
+la même valeur.
 
 **Idempotence (R-10)** : rappelée sur une session déjà validée par le même utilisateur (par exemple
 après un échec réseau), la fonction renvoie le même résultat avec `already_completed = true`, sans
@@ -119,3 +132,18 @@ variantes paramétrées par l'utilisateur et l'instant : `get_active_cook_sessio
 `complete_cook_session_at`, `get_my_progress_at`, `streak_for`. Les fonctions publiques ne font que
 leur passer `auth.uid()` et `now()`. Les tests pgTAP les appellent directement pour simuler minuit,
 le lundi 00:00 et les changements d'heure.
+
+## Côté app : photo et validation (tâche 1.4)
+
+Code : `app/src/features/dishes/`, schémas et textes dans `packages/shared/src/cookResult.ts`.
+
+- Photo prise dans l'app (`expo-camera`, sans galerie ni filtre, R-07), réduite à 1440 px de
+  large et compressée en JPEG ; l'empreinte SHA-256 porte sur les octets envoyés (R-12).
+- Chemin : `dishes/{uid}/{session}/{sha256}.jpg`. La RLS du stockage n'autorise que l'insertion
+  (pas d'écrasement, donc pas d'upsert) : un réessai du même fichier reçoit « existe déjà »
+  (409), traité comme un succès ; une autre photo (après `duplicate_photo`) a son propre chemin.
+- Un envoi réussi n'est pas refait ; `complete_cook_session` est rappelé tel quel après un échec
+  réseau et `already_completed = true` vaut succès (R-10). « Passer » disparaît dès qu'une
+  validation a été tentée.
+- Après un plat validé, l'app invalide les requêtes TanStack Query de clé `['progress', ...]`
+  (`progressKeys` exporté par `app/src/features/dishes`).

@@ -9,6 +9,7 @@ import {
   parisWeekday,
   parseMyProgress,
   parseServerInstant,
+  pepinEtatAfterDish,
   pepinEtatFromProgress,
   streakLabel,
   todayDishesLabel,
@@ -208,5 +209,12 @@ describe('pepinEtatFromProgress (R-30, sans le défi)', () => {
     // Jeudi 5 février 2026 00:00 à Paris = mercredi 4 février 23:00Z.
     expect(pepinEtatFromProgress(at('2026-02-04T22:59:59+00:00'))).toBe('neutre');
     expect(pepinEtatFromProgress(at('2026-02-04T23:00:00+00:00'))).toBe('affame');
+  });
+});
+
+describe('pepinEtatAfterDish (écran de récompense, R-30)', () => {
+  it('fier après un plat validé, même quand il fait atteindre 3/3 (fier avant en feu)', () => {
+    expect(pepinEtatAfterDish({ goal_reached: false, week_dishes_count: 1 })).toBe('fier');
+    expect(pepinEtatAfterDish({ goal_reached: true, week_dishes_count: 3 })).toBe('fier');
   });
 });
