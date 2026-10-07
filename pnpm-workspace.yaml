@@ -1,6 +1,7 @@
 packages:
   - app
   - packages/*
+  - scripts
 
 # unrs-resolver (via eslint-config-expo) fournit ses binaires précompilés : pas de script d'installation nécessaire.
 ignoredBuiltDependencies:

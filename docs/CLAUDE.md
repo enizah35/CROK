@@ -12,7 +12,7 @@ décrivent une version abandonnée : ne pas les suivre.
 | `packages/shared/` | `@crok/shared` : fonctions pures partagées (semaine, portions, état de Pépin, Zod), testées avec Vitest |
 | `supabase/`        | Migrations, tests pgTAP, Edge Function `delete-account` (tâche 0.2)     |
 | `content/`         | Recettes et défis en YAML (tâche 0.3)                                   |
-| `scripts/`         | `recipes-check`, `recipes-push` (tâche 0.3)                             |
+| `scripts/`         | `@crok/scripts` : `recipes-check`, `recipes-push` (secrets dans `scripts/.env.local`) |
 
 ## Commandes (à la racine)
 
@@ -22,8 +22,11 @@ pnpm install
 pnpm lint                # ESLint (0 avertissement toléré) + Prettier --check
 pnpm format              # Prettier --write
 pnpm typecheck           # tsc --noEmit dans chaque paquet
-pnpm test                # Vitest (packages/shared)
-pnpm run ci              # lint + typecheck + test, comme la CI GitHub
+pnpm test                # Vitest (packages/shared, scripts)
+pnpm recipes:check       # vérifie content/ (recettes et défis), voir docs/RECETTES.md
+pnpm recipes:push        # publie les recettes dans Supabase (--dry-run pour simuler)
+pnpm recipes:schema      # régénère content/*.schema.json après un changement du schéma Zod
+pnpm run ci              # lint + typecheck + test + recipes:check, comme la CI GitHub
 pnpm --filter @crok/app start   # serveur de dev Expo
 ```
 

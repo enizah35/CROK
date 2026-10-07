@@ -1,0 +1,19 @@
+# yaml-language-server: $schema=../challenge.schema.json
+#
+# MODÈLE DE DÉFI DE LA SEMAINE : copie ce fichier en AAAA-MM-JJ.yaml (date du lundi).
+# Les fichiers qui commencent par « _ » ne sont jamais publiés. Guide : docs/RECETTES.md
+
+# Lundi de la semaine du défi, au format AAAA-MM-JJ.
+week_start: 2026-10-12
+
+title: Semaine des pâtes
+description: Cuisine une recette de pâtes cette semaine pour décrocher le badge.
+
+# Slugs des recettes qui valident le défi (doivent exister dans content/recipes/).
+eligible_recipes: [pates-one-pot]
+
+# Code du badge attribué (minuscules, chiffres et _).
+badge_code: roi_des_pates
+
+# Bonus d'XP (50 par défaut).
+bonus_xp: 50

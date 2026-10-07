@@ -10,13 +10,17 @@
     "format": "prettier --write .",
     "typecheck": "pnpm -r --parallel run typecheck",
     "test": "pnpm -r run test",
-    "ci": "pnpm lint && pnpm typecheck && pnpm test"
+    "ci": "pnpm lint && pnpm typecheck && pnpm test && pnpm recipes:check",
+    "recipes:check": "tsx scripts/recipes-check.ts",
+    "recipes:push": "tsx scripts/recipes-push.ts",
+    "recipes:schema": "tsx scripts/generate-schema.ts"
   },
   "devDependencies": {
     "eslint": "^9.39.5",
     "eslint-config-expo": "~57.0.2",
     "eslint-config-prettier": "^10.1.8",
     "prettier": "^3.9.9",
+    "tsx": "^4.23.15",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.71.1"
   }
