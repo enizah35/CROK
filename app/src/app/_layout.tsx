@@ -38,7 +38,9 @@ function RootNavigator() {
       </Stack.Protected>
       <Stack.Protected guard={group === 'app'}>
         <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="cook/lancer" />
         <Stack.Screen name="cook/[session]" />
+        <Stack.Screen name="cook/photo" />
       </Stack.Protected>
     </Stack>
   );
