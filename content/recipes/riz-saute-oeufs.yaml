@@ -1,0 +1,53 @@
+# yaml-language-server: $schema=../recipe.schema.json
+slug: riz-saute-oeufs
+title: Riz sauté aux œufs et petits pois
+servings_base: 2
+total_min: 30
+active_min: 15
+cost_cents_per_serving: 85
+equipment: [plaques]
+tags: [vegetarien, anti-gaspi]
+
+ingredients:
+  - name: riz basmati
+    quantity: 150
+    unit: g
+    category: feculents
+  - name: œuf
+    quantity: 3
+    unit: piece
+    category: cremerie
+  - name: petits pois surgelés
+    quantity: 150
+    unit: g
+    category: surgeles
+  - name: oignon nouveau
+    quantity: 2
+    unit: piece
+    category: fruits_legumes
+  - name: gousse d'ail
+    quantity: 1
+    unit: piece
+    category: fruits_legumes
+  - name: sauce soja
+    quantity: 2
+    unit: cuillere_soupe
+    category: epices_condiments
+  - name: huile de tournesol
+    quantity: 2
+    unit: cuillere_soupe
+    category: epicerie
+
+steps:
+  - text: Rince le riz puis fais-le cuire dans une casserole d'eau bouillante salée.
+    timer_sec: 720
+    tip: Avec du riz cuit la veille, c'est encore meilleur et tu sautes cette étape.
+  - text: Égoutte le riz et étale-le dans une assiette pour qu'il refroidisse et sèche un peu.
+  - text: Pendant ce temps, émince les oignons nouveaux et l'ail. Bats les œufs en omelette.
+  - text: Chauffe la moitié de l'huile dans une grande poêle à feu vif et fais cuire les œufs en les brouillant, puis réserve-les.
+    timer_sec: 90
+  - text: Dans la même poêle, ajoute le reste d'huile, l'oignon, l'ail et les petits pois encore surgelés.
+    timer_sec: 180
+  - text: Ajoute le riz et fais-le sauter à feu vif sans trop remuer pour qu'il dore.
+    timer_sec: 240
+  - text: Remets les œufs, verse la sauce soja, mélange et sers bien chaud.

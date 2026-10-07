@@ -1,0 +1,20 @@
+{
+  "yaml.schemas": {
+    "./content/recipe.schema.json": ["content/recipes/*.yaml", "content/recipes/*.yml"],
+    "./content/challenge.schema.json": ["content/challenges/*.yaml", "content/challenges/*.yml"]
+  },
+  "yaml.validate": true,
+  "yaml.completion": true,
+  "yaml.hover": true,
+  "yaml.format.enable": true,
+  "[yaml]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.autoIndent": "keep",
+    "editor.quickSuggestions": { "other": true, "comments": false, "strings": true },
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "files.associations": {
+    "content/**/*.yaml": "yaml"
+  }
+}

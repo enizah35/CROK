@@ -1,0 +1,15 @@
+node_modules
+pnpm-lock.yaml
+dist
+web-build
+.expo
+app/ios
+app/android
+app/expo-env.d.ts
+
+# Documents rédigés à la main (plan, vision) : pas de reformatage automatique.
+*.md
+
+# Contenus écrits à la main par Hugo : vérifiés par `pnpm recipes:check`, pas par Prettier.
+# Le schéma JSON est généré (`pnpm recipes:schema`) et vérifié par un test.
+content/

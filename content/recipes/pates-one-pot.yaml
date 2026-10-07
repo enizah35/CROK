@@ -1,0 +1,56 @@
+# yaml-language-server: $schema=../recipe.schema.json
+slug: pates-one-pot
+title: Pâtes one-pot tomate et basilic
+servings_base: 2
+total_min: 20
+active_min: 8
+cost_cents_per_serving: 95
+equipment: [plaques]
+tags: [vegetarien, express, une-casserole]
+
+ingredients:
+  - name: spaghetti
+    quantity: 200
+    unit: g
+    category: feculents
+  - name: tomates concassées en conserve
+    quantity: 400
+    unit: g
+    category: conserves
+  - name: oignon
+    quantity: 1
+    unit: piece
+    category: fruits_legumes
+  - name: gousse d'ail
+    quantity: 2
+    unit: piece
+    category: fruits_legumes
+  - name: eau
+    quantity: 500
+    unit: ml
+  - name: huile d'olive
+    quantity: 1
+    unit: cuillere_soupe
+    category: epicerie
+  - name: basilic séché
+    quantity: 1
+    unit: cuillere_cafe
+    category: epices_condiments
+  - name: parmesan râpé
+    quantity: 30
+    unit: g
+    category: cremerie
+  - name: sel
+    unit: au_gout
+  - name: poivre
+    unit: au_gout
+
+steps:
+  - text: Émince l'oignon et l'ail finement.
+  - text: Mets les spaghetti cassés en deux dans une grande poêle ou une sauteuse froide.
+    tip: Une poêle large évite que les pâtes collent entre elles.
+  - text: Ajoute l'oignon, l'ail, les tomates, l'huile, le basilic, l'eau et une bonne pincée de sel.
+  - text: Porte à ébullition puis laisse cuire à feu moyen en remuant souvent, jusqu'à ce que presque tout le liquide soit absorbé.
+    timer_sec: 660
+    tip: Si ça accroche avant la fin, ajoute un petit verre d'eau.
+  - text: Hors du feu, poivre et parsème de parmesan. Sers tout de suite.

@@ -1,0 +1,218 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "slug": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 60,
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "Identifiant unique, identique au nom du fichier sans .yaml. Ne plus le changer une fois publié.",
+      "examples": [
+        "pates-one-pot"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 80,
+      "description": "Titre affiché dans l’app."
+    },
+    "servings_base": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 6,
+      "description": "Nombre de portions pour lesquelles les quantités sont écrites."
+    },
+    "total_min": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 300,
+      "description": "Durée totale en minutes, attentes et cuissons comprises."
+    },
+    "active_min": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 300,
+      "description": "Minutes où l’on s’active vraiment (couper, remuer). Sert au délai minimum avant validation du plat (R-09)."
+    },
+    "cost_cents_per_serving": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 2000,
+      "description": "Coût estimé par portion, en centimes : 1,20 € = 120."
+    },
+    "equipment": {
+      "minItems": 1,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "plaques",
+          "four",
+          "micro_ondes"
+        ]
+      },
+      "description": "Équipements nécessaires : plaques, four, micro_ondes.",
+      "uniqueItems": true
+    },
+    "tags": {
+      "default": [],
+      "description": "Mots-clés pour les filtres, en minuscules avec tirets.",
+      "uniqueItems": true,
+      "examples": [
+        [
+          "vegetarien",
+          "express",
+          "batch-cooking"
+        ]
+      ],
+      "maxItems": 8,
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+      }
+    },
+    "cover": {
+      "description": "Photo de couverture : nom du fichier placé dans content/covers/.",
+      "type": "string",
+      "pattern": "^[a-z0-9-]+\\.(?:jpg|jpeg|png|webp)$"
+    },
+    "published": {
+      "default": true,
+      "description": "false pour garder la recette en brouillon (non visible dans l’app).",
+      "type": "boolean"
+    },
+    "ingredients": {
+      "minItems": 1,
+      "maxItems": 30,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 60,
+            "description": "Nom de l'ingrédient tel qu'il s'affiche, au singulier ou au pluriel naturel.",
+            "examples": [
+              "oignon",
+              "pâtes (spaghetti)",
+              "lentilles corail"
+            ]
+          },
+          "quantity": {
+            "description": "Quantité pour `servings_base` portions. Nombre avec un point décimal (0.5). À omettre seulement avec l’unité `au_gout`.",
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 10000
+          },
+          "unit": {
+            "type": "string",
+            "enum": [
+              "g",
+              "ml",
+              "piece",
+              "cuillere_soupe",
+              "cuillere_cafe",
+              "pincee",
+              "au_gout"
+            ],
+            "description": "Unité. g et ml pour tout ce qui se pèse ou se mesure, piece pour ce qui se compte (1 oignon, 2 œufs, 1 gousse d’ail), au_gout pour sel et poivre."
+          },
+          "non_scalable": {
+            "description": "true si la quantité ne doit pas changer avec le nombre de portions (ex. 1 feuille de laurier). Faux par défaut.",
+            "type": "boolean"
+          },
+          "category": {
+            "description": "Rayon du magasin (facultatif).",
+            "type": "string",
+            "enum": [
+              "fruits_legumes",
+              "cremerie",
+              "viande_poisson",
+              "feculents",
+              "conserves",
+              "epicerie",
+              "epices_condiments",
+              "surgeles",
+              "boulangerie"
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "unit"
+        ],
+        "additionalProperties": false,
+        "defaultSnippets": [
+          {
+            "label": "Ingrédient",
+            "body": {
+              "name": "$1",
+              "quantity": 100,
+              "unit": "g"
+            }
+          }
+        ]
+      },
+      "description": "Ingrédients, dans l’ordre d’utilisation."
+    },
+    "steps": {
+      "minItems": 1,
+      "maxItems": 25,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 400,
+            "description": "Une seule action, à l’impératif. S’affiche seule sur un écran."
+          },
+          "timer_sec": {
+            "description": "Minuteur proposé pendant l’étape, en secondes : 300 = 5 min, 600 = 10 min.",
+            "type": "integer",
+            "minimum": 10,
+            "maximum": 14400
+          },
+          "tip": {
+            "description": "Astuce facultative affichée sous l’étape.",
+            "type": "string",
+            "minLength": 5,
+            "maxLength": 200
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "additionalProperties": false,
+        "defaultSnippets": [
+          {
+            "label": "Étape",
+            "body": {
+              "text": "$1"
+            }
+          }
+        ]
+      },
+      "description": "Étapes du mode cuisine, une par écran (R-05)."
+    }
+  },
+  "required": [
+    "slug",
+    "title",
+    "servings_base",
+    "total_min",
+    "active_min",
+    "cost_cents_per_serving",
+    "equipment",
+    "ingredients",
+    "steps"
+  ],
+  "additionalProperties": false,
+  "title": "Recette CROK",
+  "description": "Une recette écrite à la main. Guide : docs/RECETTES.md"
+}
