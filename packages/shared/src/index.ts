@@ -78,3 +78,20 @@ export {
   toggleValue,
 } from './recipeFilters';
 export type { FilterableRecipe, RecipeFilters } from './recipeFilters';
+export {
+  InvalidServerResponseError,
+  PEPIN_ETATS,
+  WEEKLY_GOAL,
+  daysLeftInWeek,
+  daysLeftLabel,
+  formatParisDay,
+  formatXp,
+  myProgressSchema,
+  parisWeekday,
+  parseMyProgress,
+  parseServerInstant,
+  pepinEtatFromProgress,
+  streakLabel,
+  todayDishesLabel,
+} from './progress';
+export type { MyProgress, PepinEtat } from './progress';
