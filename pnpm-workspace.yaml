@@ -5,3 +5,7 @@ packages:
 # unrs-resolver (via eslint-config-expo) fournit ses binaires précompilés : pas de script d'installation nécessaire.
 ignoredBuiltDependencies:
   - unrs-resolver
+
+# Le paquet supabase télécharge le binaire de la CLI à l'installation.
+onlyBuiltDependencies:
+  - supabase

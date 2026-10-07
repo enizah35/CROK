@@ -39,3 +39,37 @@ jobs:
       - run: pnpm install --frozen-lockfile
 
       - run: pnpm run ci
+
+  db:
+    name: Base de données (migrations, pgTAP, types)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      COREPACK_ENABLE_DOWNLOAD_PROMPT: 0
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.120.0
+
+      # Seuls Postgres, l'auth, le stockage et l'API sont nécessaires aux migrations et aux tests.
+      - name: Démarrer Supabase en local
+        run: supabase start -x realtime,studio,imgproxy,mailpit,edge-runtime,logflare,vector,supavisor
+
+      - name: Tests pgTAP (RLS, contraintes, fonctions de temps)
+        run: supabase db test
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Activer pnpm via corepack
+        run: corepack enable
+
+      - run: pnpm install --frozen-lockfile
+
+      - name: Types générés à jour
+        run: |
+          pnpm db:types
+          git diff --exit-code packages/shared/src/database.types.ts

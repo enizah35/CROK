@@ -2,8 +2,8 @@
  * Temps de référence de CROK (R-01, R-02).
  *
  * Une seule horloge : Europe/Paris. Une semaine va du lundi 00:00 au dimanche 23:59:59
- * (heure de Paris). L'équivalent SQL de `weekStart` vivra dans `supabase/` (tâche 0.2)
- * et doit renvoyer exactement les mêmes valeurs.
+ * (heure de Paris). Équivalents SQL : `public.week_start` et `public.day_paris`
+ * (supabase/migrations), testés sur les mêmes cas dans supabase/tests/time.test.sql.
  */
 
 export const PARIS_TIME_ZONE = 'Europe/Paris';
