@@ -1,0 +1,5 @@
+-- Données de départ de la base locale (`supabase db reset`). Aucune donnée personnelle.
+--
+-- Volontairement vide : les comptes se créent par l'app (code reçu par email, visible dans
+-- Mailpit en local) et les recettes viennent de content/ via `pnpm recipes:push` (clé
+-- service_role locale donnée par `supabase status`), pour ne pas dupliquer les YAML ici.

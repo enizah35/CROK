@@ -5,10 +5,13 @@
   "dependencies": {
     "@crok/shared": "workspace:*",
     "@expo/metro-runtime": "~57.0.16",
+    "@supabase/supabase-js": "^2.117.3",
+    "@tanstack/react-query": "^5.104.1",
     "expo": "~57.0.27",
     "expo-constants": "~57.0.21",
     "expo-linking": "~57.0.12",
     "expo-router": "~57.0.25",
+    "expo-secure-store": "~57.0.4",
     "expo-status-bar": "~57.0.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
@@ -16,6 +19,7 @@
     "react-native-safe-area-context": "~5.7.0",
     "react-native-screens": "~4.26.2",
     "react-native-svg": "15.15.4",
+    "react-native-url-polyfill": "^3.0.0",
     "react-native-web": "~0.21.3"
   },
   "devDependencies": {
@@ -36,12 +40,5 @@
     "typecheck": "tsc --noEmit",
     "test": "jest"
   },
-  "private": true,
-  "jest": {
-    "preset": "jest-expo",
-    "testPathIgnorePatterns": [
-      "/node_modules/",
-      "/dist/"
-    ]
-  }
+  "private": true
 }

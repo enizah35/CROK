@@ -1,5 +1,10 @@
-import { ScreenPlaceholder } from '@/components/ScreenPlaceholder';
+import { OnboardingForm } from '@/features/onboarding/OnboardingForm';
+import { Screen } from '@/ui';
 
 export default function BienvenueScreen() {
-  return <ScreenPlaceholder title="Bienvenue" task="0.4" />;
+  return (
+    <Screen padded={false}>
+      <OnboardingForm />
+    </Screen>
+  );
 }

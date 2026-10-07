@@ -36,6 +36,12 @@ pnpm db:test             # tests pgTAP de supabase/tests/
 pnpm db:types            # régénère packages/shared/src/database.types.ts (à committer)
 ```
 
+En local, les emails (code de connexion à 6 chiffres, modèle `supabase/templates/`) arrivent
+dans Mailpit : http://127.0.0.1:54324. Pour avoir les recettes exemples après un `db:reset` :
+`pnpm recipes:push` avec `scripts/.env.local` rempli (clé service_role de `supabase status`).
+Types de la base côté app : `import type { Database, Tables } from '@crok/shared'` (générés,
+jamais écrits à la main).
+
 Base de données : toute modification passe par une nouvelle migration
 (`pnpm exec supabase migration new <nom>`), jamais par une édition d'une migration déjà poussée.
 Chaque nouvelle table : RLS activée, droits accordés explicitement à `authenticated` (aucun droit

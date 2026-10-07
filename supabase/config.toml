@@ -244,6 +244,17 @@ otp_expiry = 3600
 # admin_email = "admin@email.com"
 # sender_name = "Admin"
 
+# R-32 : connexion par code à 6 chiffres ({{ .Token }}, otp_length = 6), pas par lien.
+# signInWithOtp envoie « confirmation » à une nouvelle adresse et « magic_link » ensuite.
+# Chemins relatifs à la racine du dépôt (où l'on lance `supabase`).
+[auth.email.template.confirmation]
+subject = "Ton code de connexion CROK"
+content_path = "./supabase/templates/code-connexion.html"
+
+[auth.email.template.magic_link]
+subject = "Ton code de connexion CROK"
+content_path = "./supabase/templates/code-connexion.html"
+
 # Uncomment to customize email template
 # [auth.email.template.invite]
 # subject = "You have been invited"

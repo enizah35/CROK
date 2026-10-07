@@ -559,8 +559,10 @@ export type Database = {
     };
     Functions: {
       are_friends: { Args: { a: string; b: string }; Returns: boolean };
+      complete_onboarding: { Args: { p_avatar_id: number; p_pseudo: string }; Returns: undefined };
       day_paris: { Args: { instant: string }; Returns: string };
       generate_friend_code: { Args: Record<PropertyKey, never>; Returns: string };
+      is_pseudo_available: { Args: { p_pseudo: string }; Returns: boolean };
       week_start: { Args: { instant: string }; Returns: string };
     };
     Enums: {
