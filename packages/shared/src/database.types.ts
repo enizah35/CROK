@@ -559,9 +559,15 @@ export type Database = {
     };
     Functions: {
       are_friends: { Args: { a: string; b: string }; Returns: boolean };
+      complete_cook_session: {
+        Args: { p_photo_path: string; p_photo_sha256: string; p_session_id: string };
+        Returns: Json;
+      };
       complete_onboarding: { Args: { p_avatar_id: number; p_pseudo: string }; Returns: undefined };
       day_paris: { Args: { instant: string }; Returns: string };
       generate_friend_code: { Args: Record<PropertyKey, never>; Returns: string };
+      get_active_cook_session: { Args: Record<PropertyKey, never>; Returns: Json };
+      get_my_progress: { Args: Record<PropertyKey, never>; Returns: Json };
       is_pseudo_available: { Args: { p_pseudo: string }; Returns: boolean };
       week_start: { Args: { instant: string }; Returns: string };
     };
