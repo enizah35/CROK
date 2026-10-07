@@ -25,7 +25,19 @@ pnpm typecheck           # tsc --noEmit dans chaque paquet
 pnpm test                # Vitest (packages/shared)
 pnpm run ci              # lint + typecheck + test, comme la CI GitHub
 pnpm --filter @crok/app start   # serveur de dev Expo
+
+# Supabase local (Docker requis)
+pnpm db:start            # démarre la pile locale
+pnpm db:reset            # rejoue toutes les migrations de supabase/migrations/
+pnpm db:test             # tests pgTAP de supabase/tests/
+pnpm db:types            # régénère packages/shared/src/database.types.ts (à committer)
 ```
+
+Base de données : toute modification passe par une nouvelle migration
+(`pnpm exec supabase migration new <nom>`), jamais par une édition d'une migration déjà poussée.
+Chaque nouvelle table : RLS activée, droits accordés explicitement à `authenticated` (aucun droit
+par défaut), tests pgTAP « ami » et « inconnu », puis `pnpm db:types`. Fonction security definer :
+`revoke execute ... from public, anon` puis `grant execute ... to authenticated` si le client l'appelle.
 
 Ajouter une dépendance native à l'app : `cd app && npx expo install <paquet>` (versions
 compatibles avec le SDK). Si l'API Expo n'est pas joignable, prendre la version indiquée dans
