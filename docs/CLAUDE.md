@@ -22,7 +22,7 @@ pnpm install
 pnpm lint                # ESLint (0 avertissement toléré) + Prettier --check
 pnpm format              # Prettier --write
 pnpm typecheck           # tsc --noEmit dans chaque paquet
-pnpm test                # Vitest (packages/shared)
+pnpm test                # Vitest (packages/shared) + Jest (app, jest-expo)
 pnpm run ci              # lint + typecheck + test, comme la CI GitHub
 pnpm --filter @crok/app start   # serveur de dev Expo
 ```
