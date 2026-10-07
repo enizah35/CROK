@@ -40,6 +40,7 @@ function RootNavigator() {
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="recette/[id]" />
         <Stack.Screen name="cook/[session]" />
+        <Stack.Screen name="cook/photo" />
       </Stack.Protected>
     </Stack>
   );

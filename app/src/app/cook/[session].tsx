@@ -1,8 +1,8 @@
 import { useLocalSearchParams } from 'expo-router';
 
-import { ScreenPlaceholder } from '@/components/ScreenPlaceholder';
+import { CookScreen } from '@/features/cook/CookScreen';
 
-export default function CookSessionScreen() {
+export default function CookSessionRoute() {
   const { session } = useLocalSearchParams<{ session: string }>();
-  return <ScreenPlaceholder title={`Cuisson ${session ?? ''}`.trim()} task="1.2" />;
+  return <CookScreen sessionId={session ?? ''} />;
 }
